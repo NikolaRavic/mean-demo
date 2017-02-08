@@ -14,8 +14,15 @@
                 });
             };
 
-            this.deleteImage = function (image) {
-                return $http.post(LOCAL_HOST.url + 'delete-image',{params: {image: image}});
+
+            this.deleteImage = function (image, id) {
+                var params = {
+                    params: {
+                        image: image,
+                        id: id
+                    }
+                };
+                return $http.post(LOCAL_HOST.url + 'delete-image',{});
             }
         });
 

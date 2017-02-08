@@ -19,6 +19,7 @@ app.get('/get-all-images', function (req, res) {
 app.post('/delete-image', function (req, res) {
 
     var image = req.body.params.image;
+    var id = req.body.params.id;
 
     fs.rename(public_root + '/' + image, image_root + '/archive/' + path.basename(image), function (err) {
         if(err){
@@ -26,7 +27,7 @@ app.post('/delete-image', function (req, res) {
             res.send(err);
         }else {
             res.send('Deleted');
-            console.log("Image " + image + " moved to archive folder!");
+            console.log("Image " + image + " moved to archive folder!", "index: " + id);
         }
     });
 });

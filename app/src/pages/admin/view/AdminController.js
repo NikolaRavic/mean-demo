@@ -13,7 +13,7 @@
       //test
       console.log($scope.images);
 
-      $scope.delete = function (event, image) {
+      $scope.delete = function (event, image, index) {
           var dialog = $mdDialog.confirm()
               .title('Would you like to delete this image?')
               .textContent('The image is not deleted permanently, it is moved to archive folder.')
@@ -23,7 +23,7 @@
 
           $mdDialog.show(dialog).then(function () {
 
-              imagesApiService.deleteImage(image).then(function (payload) {
+              imagesApiService.deleteImage(image, index).then(function (payload) {
                   console.log(image, payload);
                   $mdToast.show(
                       $mdToast.simple()
