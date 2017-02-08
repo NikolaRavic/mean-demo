@@ -12,5 +12,4 @@
         controllerAs: 'page'
       });
   }
-
 })();
