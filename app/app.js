@@ -1,38 +1,19 @@
 angular
-    .module('adminApp', ['ngMaterial', 'ngAnimate', 'ui.router'])
-    .config(function($mdThemingProvider, $mdIconProvider, $stateProvider, $urlRouterProvider){
-
-        $mdIconProvider
-            .defaultIconSet("./assets/svg/avatars.svg", 128)
-            .icon("menu"       , "./assets/svg/menu.svg"        , 24)
-            .icon("share"      , "./assets/svg/share.svg"       , 24)
-            .icon("google_plus", "./assets/svg/google_plus.svg" , 512)
-            .icon("hangouts"   , "./assets/svg/hangouts.svg"    , 512)
-            .icon("twitter"    , "./assets/svg/twitter.svg"     , 512)
-            .icon("phone"      , "./assets/svg/phone.svg"       , 512);
+    .module('adminApp', ['ngMaterial', 'ngAnimate', 'ngRoute'])
+    .config(function($mdThemingProvider, $mdIconProvider, $routeProvider){
 
         $mdThemingProvider.theme('default')
-            .primaryPalette('teal')
-            .accentPalette('red');
+            .primaryPalette('blue')
+            .accentPalette('yellow')
+            .warnPalette('red');
 
-        $stateProvider.state('admin',{
-            url: '/admin',
-            views: {
-                "admin": {
-                    controller: 'AdminController',
-                    templateUrl: 'src/pages/admin/view/galery.html',
-                    resolve: {
-                        allImages: function (imageApiService) {
-                            return imageApiService.images;
-                        }
-                    }
-                }
-            }
-
-
+        $routeProvider
+            .when('/admin',{
+                templateUrl: 'src/pages/admin/view/galery.html',
+                controller: 'AdminController'
+            }).otherwise({
+                redirectTo: '/admin'
         });
-
-        $urlRouterProvider.otherwise('/admin');
 
     }).run(run);
 

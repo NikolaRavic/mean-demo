@@ -1,5 +1,9 @@
-<md-card flex layout-padding ng-controller="AdminController">
-    <md-list>
-        <md-list-item ng-repeat="image in images"></md-list-item>
-    </md-list>
-</md-card>
+<md-text-float>Images gallery</md-text-float>
+<div layout="row" layout-padding layout-fill layout-wrap>
+    <md-whiteframe class="md-whiteframe-z2" flex-sm="45" flex-gt-sm="35" flex-gt-md="25" layout-align="center center" ng-repeat="image in images" layout="column" layout-padding layout-margin>
+        <img ng-src="{{image}}" placeholder="demo_image" style="height:300px; width: 300px"/>
+        <md-button class="md-fab md-warn md-raised" ng-click="delete($event, image)"><i class="material-icons">clear</i></md-button>
+        </span>
+    </md-whiteframe>
+</div>
+

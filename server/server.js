@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser');
 var fs = require('fs');
 var path = require('path');
 var public_root = '../app',
@@ -7,13 +8,21 @@ var public_root = '../app',
 
 app.use(express.static(public_root));
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
+
 app.get('/get-all-images', function (req, res) {
     var allImages = getImages(public_root + image_root);
     res.send(JSON.stringify(allImages));
 });
 
-app.listen(3000, function () {
-    console.log("Server running on port 3000");
+app.post('/delete-image', function (req, res) {
+    console.log(req.body.params.image);
+    res.send('Deleted');
+});
+
+app.listen(1337, function () {
+    console.log("Server running on port 1337");
 });
 
 //function recursively return files with relative path (starting from 'images/...' and excluding 'archive' folder)

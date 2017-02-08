@@ -7,12 +7,16 @@
             self.images = [];
 
             this.getAllImages = function () {
-                return $http.get(LOCAL_HOST.url + 'get-all-images').then(function (payload) {
+                $http.get(LOCAL_HOST.url + 'get-all-images').then(function (payload) {
                     self.images = payload.data;
                 },function (err) {
                     console.alert(err);
                 });
             };
+
+            this.deleteImage = function (image) {
+                return $http.post(LOCAL_HOST.url + 'delete-image',{params: {image: image}});
+            }
         });
 
 }());
