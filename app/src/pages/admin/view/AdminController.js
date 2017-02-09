@@ -4,14 +4,26 @@
        .module('adminApp')
        .controller('AdminController', AdminController);
 
-  AdminController.$inject = ['$scope','imagesApiService', '$mdDialog', '$mdToast'];
+  AdminController.$inject = ['$scope','$timeout','imagesApiService', '$mdDialog', '$mdToast', 'eventBus'];
 
-  function AdminController($scope, imagesApiService, $mdDialog, $mdToast) {
-
+  function AdminController($scope, $timeout, imagesApiService, $mdDialog, $mdToast, eventBus) {
 
       $scope.images = imagesApiService.images;
-      //test
-      console.log($scope.images);
+      $scope.max = 1;
+      $scope.pointsFilter = [0];
+      $scope.disableFilter = false;
+      $scope.selectedValue ='';
+      $scope.checked = false;
+
+      $scope.images.forEach(function (image) {
+          if($scope.pointsFilter.indexOf(image.points) === -1){
+              $scope.pointsFilter.push(image.points);
+          }
+      });
+
+      eventBus.onEvent('imageIndex', function (event, index) {
+          //TODO
+      }, $scope);
 
       $scope.delete = function (event, image, index) {
           var dialog = $mdDialog.confirm()
@@ -24,7 +36,21 @@
           $mdDialog.show(dialog).then(function () {
 
               imagesApiService.deleteImage(image, index).then(function (payload) {
-                  console.log(image, payload);
+
+                  $scope.images[index]._id = payload.data._id;
+                  $scope.images[index].folder = payload.data._id;
+                  $scope.images[index].archive = payload.data.archive;
+                  $scope.images[index].points = payload.data.points;
+
+                  eventBus.emit('updateSrc', payload.data.archive);
+
+                  for(var i = 0; i < index; i++){
+                      if($scope.images[i].archive===""){
+                          $scope.images[i].points++;
+                      }
+                  }
+                  $scope.images[index].points = 0;
+                  $scope.images[index].archive = payload;
                   $mdToast.show(
                       $mdToast.simple()
                           .textContent('Image ' + image + ' moved to archive!')
@@ -38,7 +64,45 @@
                       );
               });
 
-          });
+          },angular.noop);
+
+      };
+
+      $scope.oneAndMore=function (property, value) {
+          console.log($scope.checked);
+
+          return function (item) {
+              return item[property] > value;
+          }
+      };
+
+      $scope.equalPoint = function (property, value) {
+          return function (item) {
+              return item[property] == value;
+          }
+      };
+
+      $scope.selectFilter = function (selected) {
+          console.log(selected);
+          switch(selected){
+              case -2:
+                  $scope.disableFilter = true;
+                  break;
+              case -1:
+                  $scope.flag = true;
+                  $scope.disableFilter = false;
+                  break;
+              default:
+                  $scope.flag2 = true;
+                  $scope.disableFilter = false;
+                  break;
+
+          }
+      };
+      $scope.disableSearch = function (data) {
+          if(data){
+              $scope.disableSe = true;
+          }
       };
   }
 })();

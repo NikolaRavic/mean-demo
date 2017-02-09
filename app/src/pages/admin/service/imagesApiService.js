@@ -15,14 +15,13 @@
             };
 
 
-            this.deleteImage = function (image, id) {
+            this.deleteImage = function (image) {
                 var params = {
                     params: {
                         image: image,
-                        id: id
                     }
                 };
-                return $http.post(LOCAL_HOST.url + 'delete-image',{});
+                return $http.post(LOCAL_HOST.url + 'delete-image', params);
             }
         });
 
