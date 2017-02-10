@@ -1,15 +1,19 @@
 var express = require('express');
+var cool = require('cool-ascii-faces');
 var app = express();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var image = require('./models/images');
 var fs = require('fs');
 var path = require('path');
-var public_root = '../app',
-    image_root = '../app/images';
+var public_root = 'app',
+    image_root = 'app/images';
 
 mongoose.connect('mongodb://localhost/gallery_db');
 var Image = mongoose.model('Image');
+
+
+app.set('port', (process.env.PORT || 1337));
 
 let allImages = getImages(image_root);
 
@@ -26,7 +30,7 @@ allImages.forEach(function (image) {
         if(err) {
             console.log(err);
         } else {
-            console.log(im);
+            // console.log(im);
         }
     })
 });
@@ -36,6 +40,10 @@ app.use(express.static(public_root));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
+
+app.get('/cool', function(request, response) {
+    response.send(cool());
+});
 
 app.get('/get-all-images', function (req, res) {
     Image.find(function (err, images) {
@@ -75,8 +83,8 @@ app.post('/delete-image', function (req, res) {
     });
 });
 
-app.listen(1337, function () {
-    console.log("Server running on port 1337");
+app.listen(app.get('port'), function () {
+    console.log("Server running on port " + app.get('port'));
 });
 
 //function recursively return files with relative path (starting from 'images/...' and excluding 'archive' folder)
@@ -90,7 +98,7 @@ function getImages(dir, images) {
         if(fs.statSync(name).isDirectory()){
             getImages(name, images);
         } else{
-            images.push(name.substr(7));
+            images.push(name.substr(4));
         }
     });
     return images;
