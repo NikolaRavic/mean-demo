@@ -10,16 +10,27 @@ angular
         $routeProvider
             .when('/admin',{
                 templateUrl: 'src/pages/admin/view/galery.html',
-                controller: 'AdminController'
+                controller: 'AdminController',
+                resolve: {
+                    images: function(imagesApiService, $q){
+                        var defered = $q.defer();
+                        imagesApiService.getAllImages().then(function (payload) {
+                            defered.resolve(payload.data);
+
+                        },function (err) {
+                            defered.reject(err);
+                        });
+                        return defered.promise;
+                    }
+                }
             }).otherwise({
                 redirectTo: '/admin'
         });
 
     }).run(run);
 
-    run.$inject = ['imagesApiService'];
+    run.$inject = [];
 
-    function run(imagesApiService) {
-        imagesApiService.getAllImages();
-        console.log('Angular runs!')
+    function run() {
+            console.log('Angular runs!');
     }

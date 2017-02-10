@@ -4,22 +4,24 @@
        .module('adminApp')
        .controller('AdminController', AdminController);
 
-  AdminController.$inject = ['$scope','$timeout','imagesApiService', 'eventBus','$mdDialog', '$mdToast'];
+  AdminController.$inject = ['$scope','$timeout','images', 'eventBus','$mdDialog', '$mdToast'];
 
-  function AdminController($scope, $timeout, imagesApiService, eventBus, $mdDialog, $mdToast) {
+  function AdminController($scope, $timeout, images, eventBus, $mdDialog, $mdToast) {
 
-      $scope.images = imagesApiService.images;
+      $scope.images = images;
+      console.log($scope.images);
+
       $scope.max = 1;
       $scope.pointsFilter = [0];
       $scope.disableFilter = false;
       $scope.selectedValue ='';
       $scope.checked = false;
 
-      $scope.images.forEach(function (image) {
-          if($scope.pointsFilter.indexOf(image.points) === -1){
-              $scope.pointsFilter.push(image.points);
-          }
-      });
+      // $scope.images.forEach(function (image) {
+      //     if($scope.pointsFilter.indexOf(image.points) === -1){
+      //         $scope.pointsFilter.push(image.points);
+      //     }
+      // });
 
       eventBus.onEvent('imageIndex', function (event, index) {
           //TODO

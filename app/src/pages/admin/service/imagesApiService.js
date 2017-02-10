@@ -7,11 +7,7 @@
             self.images = [];
 
             this.getAllImages = function () {
-                $http.get(LOCAL_HOST.url + 'get-all-images').then(function (payload) {
-                    self.images = payload.data;
-                },function (err) {
-                    console.alert(err);
-                });
+                return $http.get(LOCAL_HOST.url + 'get-all-images');
             };
 
 

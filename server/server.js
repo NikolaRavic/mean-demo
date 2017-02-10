@@ -13,7 +13,7 @@ mongoose.connect('mongodb://nik0la:a123456@ds149479.mlab.com:49479/heroku_wx5n74
 var Image = mongoose.model('Image');
 
 
-app.set('port', (process.env.PORT || 1337));
+app.set('port', (process.env.PORT || 5000));
 
 let allImages = getImages(image_root);
 
