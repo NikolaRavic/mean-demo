@@ -9,7 +9,7 @@ var path = require('path');
 var public_root = 'app',
     image_root = 'app/images';
 
-mongoose.connect('mongodb://localhost/gallery_db');
+mongoose.connect('mongodb://nik0la:a123456@ds149479.mlab.com:49479/heroku_wx5n74q8');
 var Image = mongoose.model('Image');
 
 
