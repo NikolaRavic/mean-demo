@@ -1,6 +1,8 @@
 angular
     .module('adminApp', ['ngMaterial', 'ngAnimate', 'ngRoute'])
-    .config(function($mdThemingProvider, $mdIconProvider, $routeProvider){
+    .config(function($qProvider, $mdThemingProvider, $mdIconProvider, $routeProvider){
+
+        $qProvider.errorOnUnhandledRejections(false);
 
         $mdThemingProvider.theme('default')
             .primaryPalette('blue')

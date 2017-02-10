@@ -9,8 +9,6 @@
   function AdminController($scope, $timeout, images, eventBus, $mdDialog, $mdToast) {
 
       $scope.images = images;
-      console.log($scope.images);
-
       $scope.max = 1;
       $scope.pointsFilter = [0];
       $scope.disableFilter = false;
