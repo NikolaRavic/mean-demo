@@ -13,24 +13,25 @@ var Image = mongoose.model('Image');
 
 let allImages = getImages(image_root);
 
+//initial reading from file folder and saving to database if document does not exist in DB
 
-// reading from file folder and saving to database
-//
-// allImages.forEach(function (image) {
-//     var img = new Image({
-//         folder: image,
-//         archive: "",
-//         points: 0
-//     });
-//     img.save(function (err, im) {
-//         if(err) {
-//             console.log(err);
-//         } else {
-//             console.log(im);
-//         }
-//     })
-// });
+allImages.forEach(function (image) {
 
+    var img = new Image({
+        folder: image,
+        archive: "",
+        points: Math.floor(Math.random() * 1000 + 1) //initial points = random number between 1 and 1000 (zero points only if deleted)
+    });
+    img.save(function (err, im) {
+        if(err) {
+            console.log(err);
+        } else {
+            console.log(im);
+        }
+    })
+});
+
+//expose public folder
 app.use(express.static(public_root));
 
 app.use(bodyParser.json());

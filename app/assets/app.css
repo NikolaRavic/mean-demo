@@ -213,3 +213,14 @@ span.name {
 .visible {
   opacity: 1;
 }
+.md-dialog-container{
+  position:fixed;
+  top:0 !important;
+  overflow:hidden;
+}
+.md-toast-container{
+  position:fixed;
+  top:0 !important;
+  overflow:hidden;
+}
+

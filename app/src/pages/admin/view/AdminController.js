@@ -4,9 +4,9 @@
        .module('adminApp')
        .controller('AdminController', AdminController);
 
-  AdminController.$inject = ['$scope','$timeout','imagesApiService', '$mdDialog', '$mdToast', 'eventBus'];
+  AdminController.$inject = ['$scope','$timeout','imagesApiService', 'eventBus','$mdDialog', '$mdToast'];
 
-  function AdminController($scope, $timeout, imagesApiService, $mdDialog, $mdToast, eventBus) {
+  function AdminController($scope, $timeout, imagesApiService, eventBus, $mdDialog, $mdToast) {
 
       $scope.images = imagesApiService.images;
       $scope.max = 1;
@@ -25,46 +25,50 @@
           //TODO
       }, $scope);
 
-      $scope.delete = function (event, image, index) {
-          var dialog = $mdDialog.confirm()
-              .title('Would you like to delete this image?')
-              .textContent('The image is not deleted permanently, it is moved to archive folder.')
-              .targetEvent(event)
-              .ok('Delete')
-              .cancel('Cancel');
+      $scope.delete = function ($event, image, index) {
+
+          var dialog = $mdDialog.confirm(
+              {
+                  title: 'Would you like to delete this image?',
+                  textContent: 'The image is not deleted permanently, it is moved to archive folder.',
+                  clickOutsideToClose:true,
+                  targetEvent: $event,
+                  hasBackdrop:false,
+                  ok: 'Delete',
+                  cancel: 'Cancel'
+              });
+
 
           $mdDialog.show(dialog).then(function () {
 
               imagesApiService.deleteImage(image, index).then(function (payload) {
 
-                  $scope.images[index]._id = payload.data._id;
-                  $scope.images[index].folder = payload.data._id;
-                  $scope.images[index].archive = payload.data.archive;
-                  $scope.images[index].points = payload.data.points;
+                  $scope.images.splice(index,1);
 
-                  eventBus.emit('updateSrc', payload.data.archive);
+                  $scope.images.push(payload.data)
+                  //
+                  //     ._id = payload.data._id;
+                  // $scope.images[index].folder = payload.data._id;
+                  // $scope.images[index].archive = payload.data.archive;
+                  // $scope.images[index].points = payload.data.points;
 
-                  for(var i = 0; i < index; i++){
-                      if($scope.images[i].archive===""){
-                          $scope.images[i].points++;
-                      }
-                  }
-                  $scope.images[index].points = 0;
-                  $scope.images[index].archive = payload;
-                  $mdToast.show(
-                      $mdToast.simple()
-                          .textContent('Image ' + image + ' moved to archive!')
-                          .hideDelay(2000)
-                  );
+                  // eventBus.emit('updateSrc', payload.data.archive);
+
+                  // for(var i = 0; i < index; i++){
+                  //     if($scope.images[i].archive===""){
+                  //         $scope.images[i].points++;
+                  //     }
+                  // }
+                  // $scope.images[index].points = 0;
+                  // $scope.images[index].archive = payload;
+
+                  console.log(payload.data.archive);
+
               }, function (err) {
-                      $mdToast.show(
-                          $mdToast.simple()
-                              .textContent('Error: ' + err)
-                              .hideDelay(2000)
-                      );
+                      console.alert(err);
               });
 
-          },angular.noop);
+          });
 
       };
 
