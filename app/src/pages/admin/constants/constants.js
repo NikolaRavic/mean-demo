@@ -3,6 +3,6 @@
 
     angular.module('adminApp')
         .constant('LOCAL_HOST',{
-            url: 'http://localhost:5000/'
+            url: 'https://mean-demo-ravic.herokuapp.com'
         });
 }());
