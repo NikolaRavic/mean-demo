@@ -9,7 +9,7 @@ var path = require('path');
 var public_root = 'app',
     image_root = 'app/images';
 
-mongoose.connect('mongodb://nik0la:a123456@ds149479.mlab.com:49479/heroku_wx5n74q8');
+mongoose.connect('mongodb://nik0la:n12345@ds149489.mlab.com:49489/heroku_09pzbvw6');
 var Image = mongoose.model('Image');
 
 app.set('port', (process.env.PORT || 5000));
