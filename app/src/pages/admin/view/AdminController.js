@@ -4,26 +4,24 @@
        .module('adminApp')
        .controller('AdminController', AdminController);
 
-  AdminController.$inject = ['$scope','$timeout','images', 'eventBus','$mdDialog', '$mdToast'];
+  AdminController.$inject = ['$scope','images', 'eventBus','$mdDialog','imagesApiService'];
 
-  function AdminController($scope, $timeout, images, eventBus, $mdDialog, $mdToast) {
+  function AdminController($scope, images, eventBus, $mdDialog, imagesApiService) {
 
+      //Array of images that are fetched from backend, images are stored in a public folder. We are just passing url to be used to get image source
       $scope.images = images;
-      $scope.max = 1;
-      $scope.pointsFilter = [0];
-      $scope.disableFilter = false;
-      $scope.selectedValue ='';
-      $scope.checked = false;
 
-      // $scope.images.forEach(function (image) {
-      //     if($scope.pointsFilter.indexOf(image.points) === -1){
-      //         $scope.pointsFilter.push(image.points);
-      //     }
-      // });
+      //This is array in which points from all images are stored. We use this array for select option list to filter images by number of points
+      $scope.pointsFilter=[];
 
-      eventBus.onEvent('imageIndex', function (event, index) {
-          //TODO
-      }, $scope);
+      //load number of points for each image in order to use it in a filter
+      $scope.images.forEach(function (image) {
+          if($scope.pointsFilter.indexOf(image.points) === -1){
+              $scope.pointsFilter.push(image.points);
+          }
+      });
+
+      //Fn to send post request to move one image to archive folder and add points to all images that have less ID than image that is sent
 
       $scope.delete = function ($event, image, index) {
 
@@ -38,31 +36,33 @@
                   cancel: 'Cancel'
               });
 
+          //Show confirmation dialog
 
           $mdDialog.show(dialog).then(function () {
 
+              //'delete' one image and increment points to all images (in DB and view) that has ID less than image that we are deleting
               imagesApiService.deleteImage(image, index).then(function (payload) {
 
-                  $scope.images.splice(index,1);
+                  //This obj is used just to short-circuit forEach loop
+                  var BreakForEachException = {};
 
-                  $scope.images.push(payload.data)
-                  //
-                  //     ._id = payload.data._id;
-                  // $scope.images[index].folder = payload.data._id;
-                  // $scope.images[index].archive = payload.data.archive;
-                  // $scope.images[index].points = payload.data.points;
+                  $scope.images[index] = payload.data;
 
-                  // eventBus.emit('updateSrc', payload.data.archive);
+                  //Add 0 to points filter array
+                  $scope.pointsFilter.unshift(0);
 
-                  // for(var i = 0; i < index; i++){
-                  //     if($scope.images[i].archive===""){
-                  //         $scope.images[i].points++;
-                  //     }
-                  // }
-                  // $scope.images[index].points = 0;
-                  // $scope.images[index].archive = payload;
+                  try {
+                      $scope.images.forEach(function (image) {
 
-                  console.log(payload.data.archive);
+                          if (image._id === payload.data._id) {
+                              throw BreakForEachException;
+                          }
+                          if(image.archive ==="" ){ image.points++;}
+                      });
+                  }catch (e){
+                      if (e!==BreakForEachExeption){ throw e}
+                  }
+
 
               }, function (err) {
                       console.alert(err);
@@ -72,41 +72,10 @@
 
       };
 
-      $scope.oneAndMore=function (property, value) {
-          console.log($scope.checked);
+      //triggers load of src url when applying filter
 
-          return function (item) {
-              return item[property] > value;
-          }
-      };
-
-      $scope.equalPoint = function (property, value) {
-          return function (item) {
-              return item[property] == value;
-          }
-      };
-
-      $scope.selectFilter = function (selected) {
-          console.log(selected);
-          switch(selected){
-              case -2:
-                  $scope.disableFilter = true;
-                  break;
-              case -1:
-                  $scope.flag = true;
-                  $scope.disableFilter = false;
-                  break;
-              default:
-                  $scope.flag2 = true;
-                  $scope.disableFilter = false;
-                  break;
-
-          }
-      };
-      $scope.disableSearch = function (data) {
-          if(data){
-              $scope.disableSe = true;
-          }
+      $scope.triggerSrc = function () {
+          eventBus.emit("trigger", 1);
       };
   }
 })();

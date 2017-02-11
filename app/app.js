@@ -1,6 +1,6 @@
 angular
-    .module('adminApp', ['ngMaterial', 'ngAnimate', 'ngRoute'])
-    .config(function($qProvider, $mdThemingProvider, $mdIconProvider, $routeProvider){
+    .module('adminApp', ['ngMaterial', 'ngAnimate', 'ngRoute', 'ngAnimate'])
+    .config(function ($qProvider, $mdThemingProvider, $mdIconProvider, $routeProvider) {
 
         $qProvider.errorOnUnhandledRejections(false);
 
@@ -10,29 +10,32 @@ angular
             .warnPalette('red');
 
         $routeProvider
-            .when('/admin',{
+            .when('/admin', {
                 templateUrl: 'src/pages/admin/view/galery.html',
                 controller: 'AdminController',
                 resolve: {
-                    images: function(imagesApiService, $q){
+                    //resolve is used to fetch all needed data from DB before controller is loaded
+                    images: function (imagesApiService, $q) {
+
                         var defered = $q.defer();
+
                         imagesApiService.getAllImages().then(function (payload) {
                             defered.resolve(payload.data);
 
-                        },function (err) {
+                        }, function (err) {
                             defered.reject(err);
                         });
                         return defered.promise;
                     }
                 }
             }).otherwise({
-                redirectTo: '/admin'
+            redirectTo: '/admin'
         });
 
     }).run(run);
 
-    run.$inject = [];
+run.$inject = [];
 
-    function run() {
-            console.log('Angular runs!');
-    }
+function run() {
+    console.log('Greetings from MEAN.js gallery demo app!');
+}

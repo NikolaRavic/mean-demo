@@ -3,60 +3,55 @@
     angular.module('adminApp')
         .directive('lazyLoad', lazyLoad);
 
-    lazyLoad.$inject = ['$window','eventBus'];
+    lazyLoad.$inject = ['$window', 'eventBus'];
+
+    // Directive which is used to apply lazy loading to images.
+    // It calculates the position of image wrapper element in a current viewport and decides when to set src attribute to img element.
+    // Source of image is fetched from a current scope when directive element lives
+    // param: threshold can be set to what ever height under the current bottom position of the page user wants images to start loading
+    // ***Network log can be checked to notice when images are fetched***
 
     function lazyLoad($window, eventBus) {
             return {
                 scope: {
                     source: '=',
-                    index: '@'
+                    threshold: '='
                 },
                 link: function (scope, element, attrs) {
 
+                    //
                     var h = Math.max(document.documentElement.clientHeight, this.innerHeight || 0);
                     var window = angular.element($window);
 
-                    eventBus.onEvent('updateSrc', function (event, data) {
+                    //event that triggers src update after filter is applied
+                    eventBus.onEvent('trigger', function (event, data) {
 
-                        element.parent().addClass('visible');
                         attrs.$set('src', scope.source);
-                        attrs.$set('ng-if', true);
 
                     }, scope);
 
                     if(element[0].parentNode.offsetTop < h){
-                        element.parent().addClass('visible');
-                        attrs.$set('src', scope.source);
-                        attrs.$set('ng-if', true);
-                    }else {
-                        attrs.$set('ng-if', false);
-                        element.parent().addClass('invisible');
 
+                        attrs.$set('src', scope.source);
+
+                    }else {
                     }
+
+                    //events that triggers calculation of a current element position and if decided sets src attribute of image
+
                     window.on('resize scroll DOMContentLoaded load', function (ev) {
 
-                        var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-                        var condition = this.pageYOffset + h - element[0].parentNode.offsetTop;
+                        var offsetDifference = this.pageYOffset + h - element[0].parentNode.offsetTop;
 
-                        if(condition > -100){
+                        if(offsetDifference > -scope.threshold){
 
-                            eventBus.emit('imageIndex', scope.index);
-
-                            attrs.$set('src', scope.source);
-
-                            element.parent().addClass('visible');
-
-                            scope.$apply(function () {
+                            scope.$apply(function(){
                                 attrs.$set('src', scope.source);
-                                attrs.$set('ng-if', true);
-                                }
-                            );
+                            });
+
 
                         } else {
-                            scope.$apply(function () {
-                                attrs.$set('ng-if', false);
-                                }
-                            );
+
                         }
                     });
                 }

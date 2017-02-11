@@ -8,7 +8,8 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
 
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic'>
-    <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.3/angular-material.min.css'/>
+    <link rel="stylesheet"
+          href='https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.3/angular-material.min.css'/>
     <link rel="stylesheet" href="assets/app.css"/>
 
     <!-- Remove this when building your app -->
@@ -26,26 +27,31 @@
 </head>
 
 <body ng-app="adminApp" layout="row">
+
 <md-content flex layout-padding>
     <div flex layout-fill ng-view>
     </div>
 </md-content>
 
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-animate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-aria.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.3/angular-material.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-route.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.3/angular-material.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-route.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.0/angular-animate.min.js"></script>
 
-<!-- <script src="./src/users/Users.js"></script>
-<script src="./src/users/UserController.js"></script>
-<script src="./src/users/UserService.js"></script> -->
+
 <script src="./app.js"></script>
 <script src="./src/pages/admin/constants/constants.js"></script>
 <script src="./src/pages/admin/service/imagesApiService.js"></script>
 <script src="./src/pages/admin/service/eventBus.js"></script>
 <script src="./src/pages/admin/view/AdminController.js"></script>
 <script src="./src/pages/admin/directives/lazyLoadDirective.js"></script>
+<script src="src/pages/admin/filter/pointsFilter.js"></script>
 
 </body>
 </html>
