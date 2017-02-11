@@ -60,7 +60,7 @@ app.post('/delete-image', function (req, res) {
 
     let image = req.body.params.image.folder;
     let id_img = req.body.params.image.id;
-    var img_root = 'images/archive/' + path.basename(image);
+    var img_root = image_root + '/archive/' + path.basename(image);
 
     fs.rename(public_root + '/' + image, img_root, function (err) {
         if (err) {
