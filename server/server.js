@@ -78,7 +78,6 @@ app.post('/delete-image', function (req, res) {
                 } else {
 
                     Image.find({id: {$lt: id_img}, $and: [{archive: {$eq: ""}}]}, function (err, data) {
-
                         data.forEach(function (img) {
                             //incrementing all models that are not in archive points properties
                             img.update({$inc: {points: 1}}, {new: true}, function (err, data) {

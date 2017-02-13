@@ -1,8 +1,14 @@
 angular
-    .module('adminApp', ['ngMaterial', 'ngAnimate', 'ngRoute', 'ngAnimate'])
-    .config(function ($qProvider, $mdThemingProvider, $mdIconProvider, $routeProvider) {
+    .module('adminApp', ['ngMaterial', 'ngAnimate', 'ngRoute', 'ngAnimate', 'uiGmapgoogle-maps'])
+    .config(function ($qProvider, $mdThemingProvider, $mdIconProvider, $routeProvider, uiGmapGoogleMapApiProvider) {
 
         $qProvider.errorOnUnhandledRejections(false);
+
+        uiGmapGoogleMapApiProvider.configure({
+            apiKey: 'AIzaSyAXpzMedGAaS6jkzDd0eTeIzUpoI73GF4o',
+            v: '3.20', //defaults to latest 3.X anyhow
+            libraries: 'weather,geometry,visualization'
+        });
 
         $mdThemingProvider.theme('default')
             .primaryPalette('blue')
